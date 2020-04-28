@@ -1,3 +1,5 @@
+from collections import deque
+
 class BFS():
     def __init__(self):
         self.matrix=[]
@@ -39,22 +41,21 @@ class BFS():
         size = 1
 
         #キュー
-        queue=[start]
-
+        d =deque()
+        d.append(start)
 
         while size<V:
             for v in range(V):
-                if self.root[queue[0]][v]!=float('inf') and visited[v]==0:
-                    queue.append(v)
+                if self.root[d[0]][v]!=float('inf') and visited[v]==0:
+                    d.append(v)
 
-            for d in queue:
-                if distance[d] > distance[queue[0]] + self.root[queue[0]][d]:
-                    distance[d] = distance[queue[0]] + self.root[queue[0]][d]
-                    visited[d] =1
+            for w in d:
+                if distance[w] > distance[d[0]] + self.root[d[0]][w]:
+                    distance[w] = distance[d[0]] + self.root[d[0]][w]
+                    visited[w] =1
                     size+=1
 
-            del queue[0]
-        
+            d.popleft()       
 
         print(distance)
 
