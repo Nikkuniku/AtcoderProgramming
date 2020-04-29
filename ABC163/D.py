@@ -1,12 +1,14 @@
-import math
-import itertools
-
 N,K=map(int,input().split())
+mod = (10**9) +7
 
-Larges = list(itertools.product([0,1],repeat=N+1))
-ans=0
-for i in Larges:
-    if sum(i)>=K:
-        ans+=1
+def counts(n,k):
+    if k==1:
+        return N+1
+    else:
+        return k*N - k*( k - 1 ) + 1
 
-print(ans)
+total =0
+for k in range(K,N+2):
+    total += int(counts(N,k))
+
+print(total%mod)
