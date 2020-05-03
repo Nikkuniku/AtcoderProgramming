@@ -13,6 +13,7 @@ for i in range(N):
 print(A)
 print(test)
 
+total = 0
 for i in range(2**N):
     
     Honests=[0]*N
@@ -43,7 +44,8 @@ for i in range(2**N):
                 else:
                     Honests[x]=1
             
-    print(Honests)
+    total = max(total,max(Honests))
 
+print(total)
 
 
