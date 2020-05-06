@@ -1,18 +1,42 @@
 N,M=map(int,input().split())
 
-base =['*']*N
+d={}
 
-for i in range(M):
-    s_i,c_i =map(int,input().split())
+condi = []
 
-    base[s_i-1]=str(c_i)
+string = ['0']*N
 
-if N>=2 and base[0]=='0':
-    base[0]='1' 
+flg=0
+for _ in range(M):
+    s,c = map(int,input().split())
 
-str_num = "".join(base)
+    condi.append([s,c])
 
-if '*' in str_num:
+    if s not in d:
+        d[s]=c
+    elif s in d :
+        if d[s]!=c:
+            flg+=1
+
+if flg!=0:
     print(-1)
-else:
-    print(int(str_num))
+    exit(0)
+
+if 1 in d:
+    if d[1]==0 and N!=1:
+        print(-1)
+        exit(0)
+
+if N==1 and M==0:
+    print(0)
+    exit(0)
+
+for i in range(N):
+    if i==0 and 1 not in d :
+        string[0] = '1'
+    else:
+        if i+1 in d:
+            string[i] = str(d[i+1])
+
+str_num = ''.join(string)
+print(str_num)
