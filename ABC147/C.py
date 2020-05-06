@@ -5,46 +5,34 @@ test = []
 for i in range(N):
     A_i= int(input())
     A.append(A_i)
+    testimony_i=[]
     for j in range(A_i):
         x,y= map(int,input().split())
 
-        test.append([x-1,y])
+        testimony_i.append([x,y])
+    
+    test.append(testimony_i)
 
-print(A)
-print(test)
-
-total = 0
+total=0
 for i in range(2**N):
-    
-    Honests=[0]*N
-    
+
+    member = format(i,'0{}b'.format(N))
+
+    flg = 0
+
     for j in range(N):
+        if member[j]== '1':
 
-        if (i>>j) &1:
+            syogen = test[j]
 
-            A_j = A[j]
-            
-            for k in range(A_j):
-                x,y =test[j][0],test[j][1]
-
-                x-=1
-                if y ==1:
-                    Honests[x]=1
+            for s in syogen:
+                if member[s[0]-1]==str(s[1]):
+                    continue
                 else:
-                    Honests[x]=0
-        else:
-            A_j=A[j]
+                    flg+=1
 
-            for k in range(A_j):
-                x,y =test[j][0],test[j][1]
-
-                x-=1
-                if y ==1:
-                    Honests[x]=0
-                else:
-                    Honests[x]=1
-            
-    total = max(total,max(Honests))
+    if flg ==0:
+        total = max(total , member.count('1')) 
 
 print(total)
 
