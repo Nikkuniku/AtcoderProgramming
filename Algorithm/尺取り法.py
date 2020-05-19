@@ -6,7 +6,6 @@ right = 0
 sum=0
 for left in range(n):
     
-
     while right < n and sum + a[right] <= x:
         sum+= a[right]
         right+=1
