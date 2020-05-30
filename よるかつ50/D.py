@@ -1,14 +1,16 @@
 n=int(input())
 a= list(map(int,input().split()))
 
-rain = sum(a)/2
+s= sum(a)
 
-dam=[0]*n
+s_1 = sum([a[i] for i in range(n) if i%2==1])
 
-for i in range(n):
-    if i!=n-1:
-        dam[i] = int((rain - a[i+1])*2)
-    else:
-        dam[i] = int((rain - a[0])*2)
+x_1 = s-2*s_1
 
-print(*dam)
+ans = [x_1]
+
+for i in range(n-1):
+    x = 2*a[i] - ans[-1]
+    ans .append(x)
+
+print(*ans)
