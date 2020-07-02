@@ -6,38 +6,55 @@ for _ in range(n):
     a.append(a_i)
     b.append(b_i)
 
-import bisect,numpy,math
+import bisect,math
 
 
 b=sorted(b)
-cum=list(numpy.cumsum(b))
 index = bisect.bisect_left(b,max(a))
-if index==0:
-    #全部投げる
-    throw=0
-    b=sorted(b,reverse=True)
-    cnt=0
-    for i in range(n):
-        throw+=b[i]
+
+cnt=0
+for i in range(n-1,-1,-1):
+    if i>=index:
+        h-=b[i]
         cnt+=1
-        if throw>=h:
-            break
-    h-=throw
-    if h>0:
-        cnt+=math.ceil(h/max(a))
+    else:
+        break
+    
+    if h<=0:
+        h=0
+        break
+
+ans=math.ceil(h/max(a))+cnt
+
+print(ans)
+
+
+# if index==0:
+#     #全部投げる
+#     throw=0
+#     b=sorted(b,reverse=True)
+#     cnt=0
+#     for i in range(n):
+#         throw+=b[i]
+#         cnt+=1
+#         if throw>=h:
+#             break
+#     h-=throw
+#     if h>0:
+#         cnt+=math.ceil(h/max(a))
         
-    print(cnt)
+#     print(cnt)
 
-else:
-    #降った方が良い場合もある
-    throw = 0
-    cnt=0
-    for i in range(n):
-        if i>=index:
-            throw+=b[i]
-            cnt+=1
-    h-=throw
-    if h>0:
-        cnt+=math.ceil(h/max(a))
+# else:
+#     #降った方が良い場合もある
+#     throw = 0
+#     cnt=0
+#     for i in range(n):
+#         if i>=index:
+#             throw+=b[i]
+#             cnt+=1
+#     h-=throw
+#     if h>0:
+#         cnt+=math.ceil(h/max(a))
 
-    print(cnt)
+#     print(cnt)
