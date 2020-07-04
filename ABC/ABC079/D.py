@@ -4,47 +4,43 @@ for _ in range(10):
     grid.append(list(map(int,input().split())))
 
 Wall=[]
-for _ in range(2):
+for _ in range(H):
     Wall.append(list(map(int,input().split())))
 
 
-Cost=[grid[Num][0] for Num in range(1,10)]
-for a in range(1,9):
-    visited=[0]*10
-    visited[a]=1
-    for b in range(1,9):
-        if visited[b]==1:
-            continue
-        Cost[a]=min(Cost[a],grid[a][b]+grid[b][0])
-        visited[b]=1
-        for c in range(1,9):
-            if visited[c]==1:
-                continue
-            Cost[a]=min(Cost[a],grid[a][b]+grid[b][c]+grid[c][0])
-            visited[c]=1
-            for d in range(1,9):
-                if visited[d]==1:
-                    continue
-                Cost[a]=min(Cost[a],grid[a][b]+grid[b][c]+grid[c][d]+grid[d][0])
-                visited[d]=1
-                for e in range(1,9):
-                    if visited[e]==1:
-                        continue
-                    Cost[a]=min(Cost[a],grid[a][b]+grid[b][c]+grid[c][d]+grid[d][e]+grid[e][0])
-                    visited[e]=1
-                    for f in range(1,9):
-                        if visited[f]==1:
-                            continue
-                        Cost[a]=min(Cost[a],grid[a][b]+grid[b][c]+grid[c][d]+grid[d][e]+grid[e][f]+grid[f][0])
-                        visited[f]=1
-                        for g in range(1,9):
-                            if visited[g]==1:
-                                continue
-                            Cost[a]=min(Cost[a],grid[a][b]+grid[b][c]+grid[c][d]+grid[d][e]+grid[e][f]+grid[f][g]+grid[g][0])
-                            visited[g]=1
-                            for h in range(1,9):
-                                if visited[h]==1:
-                                    continue
-                                Cost[a]=min(Cost[a],grid[a][b]+grid[b][c]+grid[c][d]+grid[d][e]+grid[e][f]+grid[f][g]+grid[g][h]+grid[h][0])
+d=[0]*10
+for start in range(10):
 
-print(Cost)
+    #距離格納配列
+    distance=grid[start]
+
+    #確定済み配列
+    visited=[0] * 10
+    visited[start] = 1
+    size = 1
+
+    while size<10:
+        min_distance = 10**9
+        for i in range(10):
+            if visited[i]==0 and distance[i] <min_distance:
+                min_distance = distance[i]
+                v = i
+
+        visited[v] = 1
+        size+=1
+
+        for x in range(10):
+            if distance[x] > distance[v] + grid[v][x]:
+                distance[x] = distance[v] + grid[v][x]
+
+    d[start]=distance[1]
+
+ans=0
+for i in range(H):
+    for j in range(W):
+        if Wall[i][j]==-1:
+            continue
+        else:
+            ans+=d[Wall[i][j]]
+
+print(ans)
