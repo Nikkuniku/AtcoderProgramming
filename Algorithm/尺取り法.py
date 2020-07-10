@@ -3,11 +3,11 @@ n=len(a)
 x = 25
 cnt=0
 right = 0
-sum=0
+total=0
 for left in range(n):
     
-    while right < n and sum + a[right] <= x:
-        sum+= a[right]
+    while right < n and total + a[right] <= x:
+        total+= a[right]
         right+=1
 
     cnt += right - left
@@ -15,7 +15,7 @@ for left in range(n):
     if left == right:
         right+=1
     else:
-        sum-=a[left]
+        total-=a[left]
 
 
 print(cnt)
