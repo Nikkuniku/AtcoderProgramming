@@ -1,29 +1,53 @@
 n=int(input())
 a=list(map(int,input().split()))
 
-from math import gcd
+A=max(a)
 
-flg=0
-ans='pairwise coprime'
-for i in range(n-1):
-    for j in range(i+1,n-1):
-        g=gcd(a[i],a[j])
-        if g!=1:
-            ans='setwise coprime'
-            flg=1
-            break
+def min_factor(k):
+    d=[]
+    for i in range(k+1):
+        d.append(i)
 
-if flg==0:
-    print(ans)
-    exit(0)
+    i=2
+    while i*i<=k:
+        if d[i]==i:
+            j=i*i
+            while j<=k:
+                if d[j]==j:
+                    d[j]=i
+                j+=i
+        i+=1
+    
+    return d
 
-tmp=a[0]
-for j in range(1,n):
-    tmp=gcd(tmp,a[j])
+def prime_factor_set(p):
+    s=set()
+    while p!=1:
+        s.add(d[p])
+        p//=d[p]  
+    
+    return s
 
-if tmp==1:
-    print(ans)
-    exit(0)
+
+d=min_factor(A)
+cur=set()
+flg=True
+for i in range(n):
+    tmp = prime_factor_set(a[i])
+    if len(cur&tmp)>=1:
+        flg=False
+        break
+    cur |= tmp
+
+import numpy as np
+
+g= np.gcd.reduce(a)
+
+if flg:
+    ans='pairwise coprime'
+elif not flg and g==1:
+    ans='setwise coprime'
 else:
-    print('not coprime')
+    ans='not coprime'
 
+print(ans)
