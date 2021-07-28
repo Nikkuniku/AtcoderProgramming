@@ -33,17 +33,29 @@ class UnionFind:
     def size(self,x):
         return self.size[x]
 
-n=int(input())
-a=list(map(int,input().split()))
-uf =UnionFind(max(a))
+import sys
+n,m=map(int,sys.stdin.readline().split())
 
-for i in range(n//2):
-    uf.unite(a[i],a[n-1-i])    
-
+edge=[]
 ans=0
-for i in range(len(uf.size)):
-    if uf.root(i)==i:
-        ans+=uf.size[i]-1
+for _  in range(m):
+    a,b=map(int,sys.stdin.readline().split())
+    edge.append([a,b])
+
+for i in range(m):
+    uf = UnionFind(n) 
+    for j in range(m):
+        if j==i:
+            continue
+
+        uf.unite(edge[j][0],edge[j][1])
+
+    cnt=0
+    for k in range(1,n+1):
+        if uf.root(k)==k:
+            cnt+=1
+
+    if cnt>1:
+        ans+=1
 
 print(ans)
-

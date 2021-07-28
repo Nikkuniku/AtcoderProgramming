@@ -1,3 +1,5 @@
+from sys import stdin
+from typing import Union
 class UnionFind:
     def __init__(self,n) -> None:
         self.par=[-1]*(n + 1)
@@ -33,17 +35,27 @@ class UnionFind:
     def size(self,x):
         return self.size[x]
 
-n=int(input())
-a=list(map(int,input().split()))
-uf =UnionFind(max(a))
+n,k,l=map(int,stdin.readline().split())
 
-for i in range(n//2):
-    uf.unite(a[i],a[n-1-i])    
+uf_road=UnionFind(n)
+uf_railroad=UnionFind(n)
+for _ in range(k):
+    p,q=map(int,stdin.readline().split())
+    uf_road.unite(p,q)
+for _ in range(l):
+    r,s=map(int,stdin.readline().split())
+    uf_railroad.unite(r,s)
 
-ans=0
-for i in range(len(uf.size)):
-    if uf.root(i)==i:
-        ans+=uf.size[i]-1
+d={}
+for i in range(1,n+1):
+    a,b=uf_road.root(i),uf_railroad.root(i)
+    if (a,b) in d:
+        d[(a,b)]+=1
+    else:
+        d[(a,b)]=1
 
-print(ans)
-
+ans=[]
+for j in range(1,n+1):
+    a,b=uf_road.root(j),uf_railroad.root(j)
+    ans.append(d[(a,b)])
+print(*ans)

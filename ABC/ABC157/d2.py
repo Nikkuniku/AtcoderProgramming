@@ -1,3 +1,6 @@
+from typing import Union
+
+
 class UnionFind:
     def __init__(self,n) -> None:
         self.par=[-1]*(n + 1)
@@ -33,17 +36,22 @@ class UnionFind:
     def size(self,x):
         return self.size[x]
 
-n=int(input())
-a=list(map(int,input().split()))
-uf =UnionFind(max(a))
+n,m,k=map(int,input().split())
+uf=UnionFind(n)
+candidate=[0]*(n+1)
+for _ in range(m):
+    a,b=map(int,input().split())
+    candidate[a]-=1
+    candidate[b]-=1
+    uf.unite(a,b)
 
-for i in range(n//2):
-    uf.unite(a[i],a[n-1-i])    
+for i in range(1,n+1):
+    candidate[i]+=uf.size[uf.root(i)]-1
 
-ans=0
-for i in range(len(uf.size)):
-    if uf.root(i)==i:
-        ans+=uf.size[i]-1
+for _ in range(k):
+    c,d=map(int,input().split())
+    if uf.issame(c,d):
+        candidate[c]-=1
+        candidate[d]-=1
 
-print(ans)
-
+print(*candidate[1:])

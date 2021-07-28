@@ -34,16 +34,17 @@ class UnionFind:
         return self.size[x]
 
 n=int(input())
-a=list(map(int,input().split()))
-uf =UnionFind(max(a))
+u=UnionFind(n)
 
-for i in range(n//2):
-    uf.unite(a[i],a[n-1-i])    
+u.unite(1,2)
+u.unite(1,4)
+u.unite(1,6)
+u.unite(3,5)
 
 ans=0
-for i in range(len(uf.size)):
-    if uf.root(i)==i:
-        ans+=uf.size[i]-1
+for i in range(1,n+1):
+    if u.root(i)==i:
+        ans+=1
 
-print(ans)
-
+print(u.par)   
+print(ans)   

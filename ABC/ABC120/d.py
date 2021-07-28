@@ -1,3 +1,6 @@
+from sys import stdin
+from math import factorial, sin
+from collections import deque
 class UnionFind:
     def __init__(self,n) -> None:
         self.par=[-1]*(n + 1)
@@ -33,17 +36,25 @@ class UnionFind:
     def size(self,x):
         return self.size[x]
 
-n=int(input())
-a=list(map(int,input().split()))
-uf =UnionFind(max(a))
+n,m=map(int,stdin.readline().split())
+edge=[]
+for _ in range(m):
+    a,b = map(int,stdin.readline().split())
+    edge.append([a,b])
 
-for i in range(n//2):
-    uf.unite(a[i],a[n-1-i])    
+ans=factorial(n)//(factorial(2)*factorial(n-2))
+answer=deque()
+answer.appendleft(ans)
+uf=UnionFind(n)
+for i in range(m-1,0,-1):
+    a = edge[i][0]
+    b = edge[i][1]
 
-ans=0
-for i in range(len(uf.size)):
-    if uf.root(i)==i:
-        ans+=uf.size[i]-1
+    bf = uf.size[uf.root(a)]
+    uf.unite(a,b)
+    af = uf.size[uf.root(a)]
+    
+    ans-=(af - bf)*bf
+    answer.appendleft(ans)
 
-print(ans)
-
+print(*answer,sep="\n")
