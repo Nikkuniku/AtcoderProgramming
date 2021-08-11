@@ -1,67 +1,39 @@
-h,w=map(int,input().split())
-rs,cs=map(int,input().split())
-rt,ct=map(int,input().split())
+from collections import deque
+h, w = map(int, input().split())
+rs, cs = map(int, input().split())
+rt, ct = map(int, input().split())
+rs, cs = rs-1, cs-1
+rt, ct = rt-1, ct-1
 INF = 10**8 + 9
 
-grid=[["#"]*(w+2)]
+grid = []
 for _ in range(h):
-    g=list(input())
-    grid.append(["#"]+g+["#"])
+    g = list(input())
+    grid.append(g)
 
-grid.append(["#"]*(w+2))
+cost = [[INF]*w for _ in range(h)]
+cost[rs][cs] = 0
 
-cost=[[INF]*(w+2) for _ in range(h+2)]
-cost[rs][rt]=0
-from collections import deque
-q=deque()
-# ↑
-if grid[rs-1][cs]=='.':
-    q.append([rs-1,cs,1])
-    cost[rs-1][cs]=0
-# →
-if grid[rs][cs+1]=='.':
-    q.append([rs,cs+1,2])    
-    cost[rs][cs+1]=0
-# ↓
-if grid[rs+1][cs]=='.':
-    q.append([rs+1,cs,3])
-    cost[rs+1][cs]=0
-# ←
-if grid[rs][cs-1]=='.':
-    q.append([rs,cs-1,4])
-    cost[rs][cs-1]=0
+q = deque()
+for i in range(4):
+    q.append((rs,cs,i,0))
+dxy = [(0, -1, 0), (-1, 0, 1), (0, 1, 2), (1, 0, 3)]
 
 while q:
-    v=q.popleft()
-    rv,cv=v[0],v[1]
-    dir=v[2]
-    # ↑
-    if grid[rv-1][cv]=='.' and cost[rv-1][cv]>cost[rv][cv]:
-        if dir==1:
-            cost[rv-1][cv]=cost[rv][cv]
-        else:
-            cost[rv-1][cv]=min(cost[rv-1][cv],cost[rv][cv]+1)
-        q.append([rv-1,cv,1])
-    # →
-    if grid[rv][cv+1]=='.' and cost[rv][cv+1]>cost[rv][cv]:
-        if dir==2:
-            cost[rv][cv+1]=cost[rv][cv]
-        else:
-            cost[rv][cv+1]=min(cost[rv][cv+1],cost[rv][cv]+1)
-        q.append([rv,cv+1,2])
-    # ↓
-    if grid[rv+1][cv]=='.' and cost[rv+1][cv]>cost[rv][cv]:
-        if dir==3:
-            cost[rv+1][cv]=cost[rv][cv]
-        else:
-            cost[rv+1][cv]=min(cost[rv+1][cv],cost[rv][cv]+1)
-        q.append([rv+1,cv,3])
-    # ←
-    if grid[rv][cv-1]=='.' and cost[rv][cv-1]>cost[rv][cv]:
-        if dir==4:
-            cost[rv][cv-1]=cost[rv][cv]
-        else:
-            cost[rv][cv-1]=min(cost[rv][cv-1],cost[rv][cv]+1)
-        q.append([rv,cv-1,4])
+    rv, cv, dict,c = q.popleft()
+
+    for i in range(4):
+        dx, dy, dir = dxy[i]
+        nx = rv+dx
+        ny = cv+dy
+        if 0 <= nx < h and 0 <= ny < w:
+            if grid[nx][ny] == '#':
+                continue
+            if cost[nx][ny] >= c+1 and dir != dict:
+                cost[nx][ny] = c+1
+                q.append((nx, ny, dir,c+1))
+            elif cost[nx][ny] >= c and dir == dict:
+                cost[nx][ny] = c
+                q.appendleft((nx, ny, dir,c))
 
 print(cost[rt][ct])
