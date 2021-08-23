@@ -36,15 +36,19 @@ class UnionFind:
 n=int(input())
 u=UnionFind(n)
 
-u.unite(1,2)
-u.unite(1,4)
-u.unite(1,6)
-u.unite(3,5)
-
+edge=[]
+for _ in range(n-1):
+    u,v,w=map(int,input().split())
+    edge.append((u,v,w))
+edge=sorted(edge,key=lambda x:x[2])
+uf=UnionFind(n)
 ans=0
-for i in range(1,n+1):
-    if u.root(i)==i:
-        ans+=1
 
-print(u.par)   
+for i in range(n-1):
+    u,v,w=edge[i]
+    p=uf.issize(u)
+    q=uf.issize(v)
+    ans+=p*q*w
+    uf.unite(u,v)
+
 print(ans)   

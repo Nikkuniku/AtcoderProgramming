@@ -34,17 +34,21 @@ class UnionFind:
         return self.size[self.root(x)]
 
 n=int(input())
-u=UnionFind(n)
+mod=998244353
+f=list(map(int,input().split()))
+v=set(f)
 
-u.unite(1,2)
-u.unite(1,4)
-u.unite(1,6)
-u.unite(3,5)
+uf = UnionFind(n)
+for i in range(n):
+    if i+1 in v:
+        uf.unite(i+1,f[i])
 
-ans=0
-for i in range(1,n+1):
-    if u.root(i)==i:
-        ans+=1
+cnt=0
+for j in range(n):
+    if j+1 not in v:
+        continue
+    if uf.root(j+1)==j+1:
+        cnt+=1
+ans=(pow(2,cnt,mod)-1)%mod
 
-print(u.par)   
-print(ans)   
+print(ans)
