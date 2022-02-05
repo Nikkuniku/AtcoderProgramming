@@ -7,3 +7,6 @@ if a<c**b:
     ans='Yes'
 
 print(ans)
+
+t=''
+print(t)
