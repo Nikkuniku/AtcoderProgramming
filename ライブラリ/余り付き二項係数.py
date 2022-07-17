@@ -10,9 +10,13 @@ for i in range(2, k):
     inv[i] = (mod - inv[mod % i]*(mod//i)) % mod
     factinv[i] = factinv[i-1]*inv[i] % mod
 
+
 def cmb(n, r, p):
     re = 1
     for j in range(r):
-        re = re*(n-j)%p
-    re = re*factinv[r]%p
+        re = re*(n-j) % p
+    re = re*factinv[r] % p
     return re
+
+
+print(cmb(5637, 5, mod))

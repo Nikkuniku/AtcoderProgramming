@@ -1,16 +1,21 @@
 # 強連結成分分解(SCC): グラフGに対するSCCを行う
 # 入力: <N>: 頂点サイズ, <G>: 順方向の有向グラフ, <RG>: 逆方向の有向グラフ
 # 出力: (<ラベル数>, <各頂点のラベル番号>)
+from collections import Counter, deque
+
+
 def scc(N, G, RG):
     order = []
     used = [0]*N
     group = [None]*N
+
     def dfs(s):
         used[s] = 1
         for t in G[s]:
             if not used[t]:
                 dfs(t)
         order.append(s)
+
     def rdfs(s, col):
         group[s] = col
         used[s] = 1
@@ -29,6 +34,8 @@ def scc(N, G, RG):
     return label, group
 
 # 縮約後のグラフを構築
+
+
 def construct(N, G, label, group):
     G0 = [set() for i in range(label)]
     GP = [[] for i in range(label)]
@@ -42,21 +49,25 @@ def construct(N, G, label, group):
         GP[lbs].append(v)
     return G0, GP
 
-n,m=map(int,input().split())
 
-G=[[] for _ in range(n)]
-GR=[[] for _ in range(n)]
+n, m = map(int, input().split())
+
+G = [[] for _ in range(n)]
+GR = [[] for _ in range(n)]
+edge = [set() for _ in range(n+1)]
+
 for _ in range(m):
-    u,v=map(int,input().split())
-    u-=1
-    v-=1
+    u, v = map(int, input().split())
+    u -= 1
+    v -= 1
     G[u].append(v)
     GR[v].append(u)
+    edge[u].add(v)
 
-l,g=scc(n,G,GR)
-print(l,g)
-from collections import Counter,deque
-c=Counter(g)
+l, g = scc(n, G, GR)
+print(l, g)
+c = Counter(g)
 print(c)
-
-print(construct(n,G,l,g))
+groups = scc.scc()
+print(groups)
+print(construct(n, G, l, g))

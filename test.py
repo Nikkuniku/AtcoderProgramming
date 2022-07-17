@@ -1,16 +1,11 @@
-n=int(input())
+from math import ceil
+ans = []
+for a in range(1, 1000):
+    for b in range(1, 1000):
+        p = ceil(b/a)
+        q = -(-b//a)
 
-ans=0
-from itertools import permutations
-p=permutations([i for i in range(n)])
+        if p != q:
+            ans.append((a, b, p, q))
 
-nums=[0]*11
-for c in p:
-    cnt=0
-    for j in range(n):
-        if c[j]==j:
-            cnt+=1
-    
-    nums[cnt]+=1
-
-print(nums)
+print(*ans, sep="\n")

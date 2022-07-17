@@ -1,26 +1,26 @@
-from operator import ne
+n, k = map(int, input().split())
+a = list(map(lambda x: int(x)-1, input().split()))
 
-
-n,k=map(int,input().split())
-a=list(map(int,input().split()))
-
-s=set()
-s.add(0)
-path=[0]
-node=[0]*(n+1)
+i = 0
+s = set()
+path = []
 while True:
-    p=path[-1]
-    node[p]=len(path)
-    next=a[p]-1
-    if next in s:
-        path.append(next)
-        break
-    else:
-        s.add(next)
-        path.append(next)
+    s.add(i)
+    path.append(i)
 
-c=len(path)-node[next]
-k-=node[next]-1
-k%=c
-ans=path[node[next]-1+k]+1
-print(ans)
+    i = a[i]
+    if i in s:
+        break
+cycle = []
+for m, v in enumerate(path):
+    if v == i:
+        break
+cycle = path[m:]
+rooplen = len(cycle)
+if k < m:
+    ans = path[k]
+else:
+    k -= m
+    k = k % rooplen
+    ans = cycle[k]
+print(ans+1)

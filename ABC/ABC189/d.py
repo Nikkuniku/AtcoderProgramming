@@ -1,33 +1,16 @@
-from os import truncate
+n = int(input())
+dp = [[0]*(n+1) for _ in range(2)]
+dp[0][0] = 1
+dp[1][0] = 1
 
+for i in range(n):
+    s = input()
+    if s == 'AND':
+        dp[0][i+1] = 2*dp[0][i]+dp[1][i]
+        dp[1][i+1] = dp[1][i]
+    else:
+        dp[0][i+1] = dp[0][i]
+        dp[1][i+1] = dp[0][i]+2*dp[1][i]
 
-n=int(input())
-operation=[]
-for _ in range(n):
-    operation.append(input())
-operation=list(reversed(operation))
-operation.append('r')
-answer=0
-def rec(o,k,m):
-    global answer
-    ans=0
-    if o=='r':
-        answer+=1
-    
-    if o=='OR' and k==True:
-        rec(operation[m+1],True,m+1)
-        rec(operation[m+1],False,m+1)
-    elif o=='OR' and k ==False:
-        rec(operation[m+1],False,m+1)
-        rec(operation[m+1],True,m+1)
-    elif o=='AND' and k==True:
-        rec(operation[m+1],True,m+1)
-    elif o=='AND' and k==False:
-        rec(operation[m+1],False,m+1)
-        rec(operation[m+1],True,m+1)
-
-    return ans
-
-print(operation)
-print(rec(operation[0],True,0))
-print(answer)
+ans = dp[1][n]
+print(ans)
