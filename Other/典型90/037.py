@@ -1,48 +1,94 @@
-w,n=map(int,input().split())
-spice=[]
-for _ in range(n):
-    spice.append(tuple(map(int,input().split())))
-p=1
-while w+1>p:
-    p*=2
-data = [0]*(2*p-1)
-INF=10**8
-def update(k,x):
-    k+=p-1
-    data[k]=x
-    while k>0:
-        k=(k-1)//2
-        data[k]=max(data[2*k +1],data[2*k +2])
-def query(a,b):
-    return query_sub(a,b,0,0,w+1)
-def query_sub(a,b,k,l,r):
-    # //対象外
-    if r<=a or b<=l:return 0
-    # 完全被覆
-    if a<=l and r<=b:return data[k]
-    # 一部被覆
-    vl = query_sub(a,b,2*k +1,l,(l+r)//2)
-    vr = query_sub(a,b,2*k +2,(l+r)//2,r)
-    return max(vl,vr)
+W, N = map(int, input().split())
+dp = [[-1]*(W+2) for _ in range(N+2)]
+dp[0][0] = 0
+#####segfunc#####
 
-dp=[[-INF]*(w+1) for _ in range(n+1)]
-dp[0][0]=0
-update(0,0)
 
-for i in range(n):
-    l,r,v=spice[i]
-    for j in range(w+1):
-        dp[i+1][j]=dp[i][j]
+def segfunc(x, y):
+    return max(x, y)
 
-    for j in range(w+1):
-        cr=max(0,j-r)
-        cl=max(0,j-l)
-        if cr==cl:continue
-        maxvalue=query(cr,cl)
-        if maxvalue!=-INF:
-            dp[i+1][j]=max(maxvalue+v,dp[i+1][j])
-    
-    for j in range(w+1):
-        update(j,dp[i+1][j])
 
-print(dp[n][w],sep="\n")
+#################
+#####ide_ele#####
+ide_ele = -1
+#################
+
+
+class SegTree:
+    """
+    init(init_val, ide_ele): 配列init_valで初期化 O(N)
+    update(k, x): k番目の値をxに更新 O(logN)
+    query(l, r): 区間[l, r)をsegfuncしたものを返す O(logN)
+    """
+
+    def __init__(self, init_val, segfunc, ide_ele):
+        """
+        init_val: 配列の初期値
+        segfunc: 区間にしたい操作
+        ide_ele: 単位元
+        n: 要素数
+        num: n以上の最小の2のべき乗
+        tree: セグメント木(1-index)
+        """
+        n = len(init_val)
+        self.segfunc = segfunc
+        self.ide_ele = ide_ele
+        self.num = 1 << (n - 1).bit_length()
+        self.tree = [ide_ele] * 2 * self.num
+        # 配列の値を葉にセット
+        for i in range(n):
+            self.tree[self.num + i] = init_val[i]
+        # 構築していく
+        for i in range(self.num - 1, 0, -1):
+            self.tree[i] = self.segfunc(self.tree[2 * i], self.tree[2 * i + 1])
+
+    def update(self, k, x):
+        """
+        k番目の値をxに更新
+        k: index(0-index)
+        x: update value
+        """
+        k += self.num
+        self.tree[k] = x
+        while k > 1:
+            self.tree[k >> 1] = self.segfunc(self.tree[k], self.tree[k ^ 1])
+            k >>= 1
+
+    def query(self, l, r):
+        """
+        [l, r)のsegfuncしたものを得る
+        l: index(0-index)
+        r: index(0-index)
+        """
+        res = self.ide_ele
+
+        l += self.num
+        r += self.num
+        while l < r:
+            if l & 1:
+                res = self.segfunc(res, self.tree[l])
+                l += 1
+            if r & 1:
+                res = self.segfunc(res, self.tree[r - 1])
+            l >>= 1
+            r >>= 1
+        return res
+
+
+seg = SegTree([-1]*(W+2), segfunc, ide_ele)
+
+for i in range(N):
+    L, R, V = map(int, input().split())
+
+    for w in range(W+1):
+        seg.update(w, dp[i][w])
+
+    for w in range(W+1):
+        left = max(0, w-R)
+        if w-L+1 > 0:
+            right = max(0, w-L+1)
+            p = seg.query(left, right)
+            if p > -1:
+                dp[i+1][w] = max(dp[i+1][w], p+V)
+        dp[i+1][w] = max(dp[i+1][w], dp[i][w])
+print(dp[N][W])

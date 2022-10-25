@@ -1,17 +1,20 @@
 n = int(input())
+MOD = 998244353
+ans = 0
 
-ans = []
-for x in range(1, n+1):
-    for y in range(1, min(x**2, n) + 1):
-        p = x**2 - y
 
-        for k in range(2, n+1):
-            if p % (k**2) == 0:
-                p //= k**2
+def cnt(k):
+    return k//2
 
-        if p == 1:
-            ans.append((x, y, x**2 - y))
-        elif p == 0:
-            ans.append((x, y, x**2 - y))
 
-print(*ans)
+for q in range(1, n+1):
+    if q**2 > n:
+        break
+    if q % 2 == 0:
+        # pはq<=p<=N/qの範囲内で偶数のもの
+        ans += cnt(n//q)-cnt(q-1)
+        ans %= MOD
+    else:
+        ans += cnt((n//q)+1)-cnt(q-1)
+        ans %= MOD
+print(ans)

@@ -23,10 +23,9 @@ for i in range(1, n+1):
             if not feed[i]:
                 feed[i] = True
                 cnt += 1
-            if i+1 < n:
-                if not feed[i+1]:
-                    feed[i+1] = True
-                    cnt += 1
+            if not feed[i+1]:
+                feed[i+1] = True
+                cnt += 1
 
     if cnt == n:
         break
