@@ -1,22 +1,40 @@
+from bisect import bisect_left
 x, y, z, K = map(int, input().split())
-a = list(map(int, input().split()))
-b = list(map(int, input().split()))
-c = list(map(int, input().split()))
-a.sort(reverse=True)
-b.sort(reverse=True)
-c.sort(reverse=True)
-a = a[:50]
-b = b[:50]
-c = c[:50]
+cakes = [list(map(int, input().split())) for _ in range(3)]
+ab = []
+for a in cakes[0]:
+    for b in cakes[1]:
+        ab.append(a+b)
+ab.sort()
 
-tmp = []
-for i in range(len(a)):
-    for j in range(len(b)):
-        tmp.append(a[i]+b[j])
 
+def check(m):
+    cnt = 0
+    for c in cakes[2]:
+        idx = bisect_left(ab, m-c)
+        cnt += len(ab)-idx
+    re = False
+    if cnt >= K:
+        re = True
+
+    return re
+
+
+l = -1
+r = 3*10**10+3
+while r-l > 1:
+    mid = (l+r)//2
+    if check(mid):
+        l = mid
+    else:
+        r = mid
 ans = []
-for k in range(len(tmp)):
-    for m in range(len(c)):
-        ans.append(tmp[k]+c[m])
-ans = sorted(ans)[::-1]
-print(*ans[:K], sep="\n")
+ab = ab[::-1]
+for c in cakes[2]:
+    for abi in ab:
+        if c+abi < l:
+            break
+        ans.append(abi+c)
+ans += [l]*(K-len(ans))
+ans = sorted(ans)[::-1][:K]
+print(*ans, sep="\n")
