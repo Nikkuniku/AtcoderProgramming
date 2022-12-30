@@ -34,17 +34,20 @@ class UnionFind:
         return self.size[self.root(x)]
 
 
-V, E = map(int, input().split())
-uf = UnionFind(V)
-Edge = [list(map(int, input().split())) for _ in range(E)]
-Edge.sort(key=lambda x: x[2])
-AdoptedEdge = []
-ans = 0
-for a, b, c in Edge:
-    if uf.issame(a, b):
-        continue
-    uf.unite(a, b)
-    AdoptedEdge.append((a, b, c))
-    ans += c
-print(ans)
-print(AdoptedEdge)
+N, M = map(int, input().split())
+uf = UnionFind(2*N)
+for _ in range(M):
+    u, v = map(int, input().split())
+    uf.unite(u-1, v-1+N)
+    uf.unite(v-1, u-1+N)
+is_bipertate = True
+for i in range(N):
+    if uf.issame(i, i+N):
+        is_bipertate = False
+Colors = [0]*(2*N)
+for i in range(N):
+    Colors[uf.root(i)] += 1
+ans = N*(N-1)//2 - M
+for c in Colors:
+    ans -= c*(c-1)//2
+print(ans if is_bipertate else 0)

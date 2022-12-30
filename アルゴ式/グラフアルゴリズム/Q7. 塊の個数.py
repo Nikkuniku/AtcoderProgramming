@@ -34,16 +34,27 @@ class UnionFind:
         return self.rank[x]
 
 
-n, q = map(int, input().split())
-u = UnionFind(n)
+H, W = map(int, input().split())
+S = [input() for _ in range(H)]
+UF = UnionFind(H*W)
+dx = [0, 1, 0, -1]
+dy = [1, 0, -1, 0]
+for i in range(H):
+    for j in range(W):
+        if S[i][j] == '.':
+            continue
+        for k in range(4):
+            ni = i+dx[k]
+            nj = j+dy[k]
+            if 0 <= ni < H and 0 <= nj < W:
+                if S[ni][nj] == '.':
+                    continue
+                UF.unite(W*i + j, W*ni+nj)
 
-for _ in range(q):
-    p, a, b = map(int, input().split())
 
-    if p == 0:
-        u.unite(a, b)
-    else:
-        if u.issame(a, b):
-            print('Yes')
-        else:
-            print('No')
+ans = 0
+for i in range(H):
+    for j in range(W):
+        if W*i+j == UF.root(W*i+j) and S[i][j] == '#':
+            ans += 1
+print(ans)

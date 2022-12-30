@@ -34,16 +34,30 @@ class UnionFind:
         return self.rank[x]
 
 
-n, q = map(int, input().split())
-u = UnionFind(n)
+H, W = map(int, input().split())
+UF = UnionFind(H*W)
+A = [list(map(int, input().split())) for _ in range(H)]
+B = [list(map(int, input().split())) for _ in range(H-1)]
+Edge = []
+total = 0
+for i in range(H):
+    for j in range(W-1):
+        p = i*W + j
+        q = i*W + j+1
+        Edge.append((p, q, A[i][j]))
+        total += A[i][j]
+for i in range(H-1):
+    for j in range(W):
+        p = i*W + j
+        q = (i+1)*W + j
+        Edge.append((p, q, B[i][j]))
+        total += B[i][j]
 
-for _ in range(q):
-    p, a, b = map(int, input().split())
-
-    if p == 0:
-        u.unite(a, b)
-    else:
-        if u.issame(a, b):
-            print('Yes')
-        else:
-            print('No')
+Edge.sort(key=lambda x: x[2], reverse=True)
+selected = 0
+for u, v, c in Edge:
+    if UF.issame(u, v):
+        continue
+    UF.unite(u, v)
+    selected += c
+print(total-selected)

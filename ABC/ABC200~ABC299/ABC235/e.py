@@ -34,16 +34,24 @@ class UnionFind:
         return self.rank[x]
 
 
-n, q = map(int, input().split())
-u = UnionFind(n)
+N, M, Q = map(int, input().split())
+uf = UnionFind(N)
+Queries = []
+ans = ['No']*Q
+for _ in range(M):
+    a, b, c = map(lambda x: int(x)-1, input().split())
+    Queries.append((0, -1, a, b, c))
+for i in range(Q):
+    u, v, w = map(lambda x: int(x)-1, input().split())
+    Queries.append((1, i, u, v, w))
 
-for _ in range(q):
-    p, a, b = map(int, input().split())
-
-    if p == 0:
-        u.unite(a, b)
+Queries.sort(key=lambda x: x[4])
+for query in Queries:
+    q, idx, u, v, w = query
+    if q == 0:
+        uf.unite(u, v)
     else:
-        if u.issame(a, b):
-            print('Yes')
-        else:
-            print('No')
+        if uf.issame(u, v):
+            continue
+        ans[idx] = 'Yes'
+print(*ans, sep="\n")

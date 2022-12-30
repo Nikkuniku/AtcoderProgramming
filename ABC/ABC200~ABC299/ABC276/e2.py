@@ -1,3 +1,6 @@
+from itertools import combinations
+
+
 class UnionFind:
     def __init__(self, n) -> None:
         self.par = [-1]*(n + 1)
@@ -34,16 +37,24 @@ class UnionFind:
         return self.rank[x]
 
 
-n, q = map(int, input().split())
-u = UnionFind(n)
-
-for _ in range(q):
-    p, a, b = map(int, input().split())
-
-    if p == 0:
-        u.unite(a, b)
-    else:
-        if u.issame(a, b):
-            print('Yes')
-        else:
-            print('No')
+H, W = map(int, input().split())
+grid = [list(input()) for _ in range(H)]
+dxy = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+uf = UnionFind(H*W)
+Adjacents = []
+for i in range(H):
+    for j in range(W):
+        if grid[i][j] in ['S', '#']:
+            continue
+        for dx, dy in dxy:
+            if 0 <= i+dx < H and 0 <= j+dy < W:
+                if grid[i+dx][j+dy] == '.':
+                    uf.unite(W*i+j, W*(i+dx)+j+dy)
+                if grid[i+dx][j+dy] == 'S':
+                    Adjacents.append((W*i+j))
+ans = 'No'
+Comb = combinations(Adjacents, 2)
+for a, b in Comb:
+    if uf.issame(a, b):
+        ans = 'Yes'
+print(ans)

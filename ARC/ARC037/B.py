@@ -34,16 +34,20 @@ class UnionFind:
         return self.rank[x]
 
 
-n, q = map(int, input().split())
-u = UnionFind(n)
-
-for _ in range(q):
-    p, a, b = map(int, input().split())
-
-    if p == 0:
-        u.unite(a, b)
+N, M = map(int, input().split())
+cycle = [0]*(N+1)
+uf = UnionFind(N)
+for _ in range(M):
+    u, v = map(int, input().split())
+    if uf.issame(u, v):
+        uf.unite(u, v)
+        cycle[uf.root(u)] = 1
+        cycle[uf.root(v)] = 1
     else:
-        if u.issame(a, b):
-            print('Yes')
-        else:
-            print('No')
+        uf.unite(u, v)
+ans = 0
+for i in range(1, N+1):
+    if i == uf.root(i):
+        if cycle[i] == 0:
+            ans += 1
+print(ans)

@@ -1,3 +1,8 @@
+N, M = map(int, input().split())
+Edge = [[i]+list(map(int, input().split())) for i in range(M)]
+Edge.sort(key=lambda x: x[3])
+
+
 class UnionFind:
     def __init__(self, n) -> None:
         self.par = [-1]*(n + 1)
@@ -34,17 +39,30 @@ class UnionFind:
         return self.size[self.root(x)]
 
 
-V, E = map(int, input().split())
-uf = UnionFind(V)
-Edge = [list(map(int, input().split())) for _ in range(E)]
-Edge.sort(key=lambda x: x[2])
-AdoptedEdge = []
-ans = 0
-for a, b, c in Edge:
-    if uf.issame(a, b):
+# 最小全域木のコストを求める
+UF = UnionFind(N)
+W = 0
+used = []
+for i, u, v, w in Edge:
+    if UF.issame(u, v):
         continue
-    uf.unite(a, b)
-    AdoptedEdge.append((a, b, c))
-    ans += c
+    UF.unite(u, v)
+    W += w
+    used.append(i)
+
+ans = N-1
+for k in used:
+    UF = UnionFind(N)
+    tmp = 0
+    for i in range(M):
+        ei, ui, vi, wi = Edge[i]
+        if ei == k:
+            continue
+        if UF.issame(ui, vi):
+            continue
+        UF.unite(ui, vi)
+        tmp += wi
+
+    if tmp == W and UF.issize(0) == N:
+        ans -= 1
 print(ans)
-print(AdoptedEdge)

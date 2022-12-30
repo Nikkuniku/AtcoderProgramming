@@ -1,7 +1,10 @@
+from collections import defaultdict
+
+
 class UnionFind:
-    def __init__(self, n) -> None:
-        self.par = [-1]*(n + 1)
-        self.size = [1]*(n + 1)
+    def __init__(self) -> None:
+        self.par = defaultdict(lambda: -1)
+        self.size = defaultdict(lambda: 1)
 
     def root(self, x):
         if self.par[x] == -1:
@@ -34,17 +37,10 @@ class UnionFind:
         return self.size[self.root(x)]
 
 
-V, E = map(int, input().split())
-uf = UnionFind(V)
-Edge = [list(map(int, input().split())) for _ in range(E)]
-Edge.sort(key=lambda x: x[2])
-AdoptedEdge = []
-ans = 0
-for a, b, c in Edge:
-    if uf.issame(a, b):
-        continue
-    uf.unite(a, b)
-    AdoptedEdge.append((a, b, c))
-    ans += c
-print(ans)
-print(AdoptedEdge)
+n = int(input())
+uf = UnionFind()
+uf.unite(1, 2)
+uf.unite(1, 4)
+uf.unite(1, 6)
+uf.unite(3, 5)
+print(uf.par)

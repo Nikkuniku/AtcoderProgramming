@@ -34,17 +34,29 @@ class UnionFind:
         return self.size[self.root(x)]
 
 
-V, E = map(int, input().split())
-uf = UnionFind(V)
-Edge = [list(map(int, input().split())) for _ in range(E)]
-Edge.sort(key=lambda x: x[2])
-AdoptedEdge = []
-ans = 0
-for a, b, c in Edge:
-    if uf.issame(a, b):
-        continue
+N, M = map(int, input().split())
+MOD = 998244353
+uf = UnionFind(N)
+Edges = [[] for _ in range(N)]
+deg = [0]*N
+for _ in range(M):
+    a, b = map(lambda x: int(x)-1, input().split())
     uf.unite(a, b)
-    AdoptedEdge.append((a, b, c))
-    ans += c
+    deg[a] += 1
+    deg[b] += 1
+
+ans = 1
+for i in range(N):
+    if i == uf.root(i):
+        continue
+    deg[uf.root(i)] += deg[i]
+
+for i in range(N):
+    if i == uf.root(i):
+        deg[i] //= 2
+        if uf.issize(i) == deg[i]:
+            ans *= 2
+        else:
+            ans *= 0
+    ans %= MOD
 print(ans)
-print(AdoptedEdge)

@@ -1,3 +1,8 @@
+N = int(input())
+colors = 400002
+deg = [0]*colors
+
+
 class UnionFind:
     def __init__(self, n) -> None:
         self.par = [-1]*(n + 1)
@@ -34,17 +39,24 @@ class UnionFind:
         return self.size[self.root(x)]
 
 
-V, E = map(int, input().split())
-uf = UnionFind(V)
-Edge = [list(map(int, input().split())) for _ in range(E)]
-Edge.sort(key=lambda x: x[2])
-AdoptedEdge = []
-ans = 0
-for a, b, c in Edge:
-    if uf.issame(a, b):
-        continue
+uf = UnionFind(colors)
+for _ in range(N):
+    a, b = map(int, input().split())
     uf.unite(a, b)
-    AdoptedEdge.append((a, b, c))
-    ans += c
+    deg[a] += 1
+    deg[b] += 1
+
+for i in range(colors):
+    if uf.root(i) == i:
+        continue
+    deg[uf.root(i)] += deg[i]
+
+ans = 0
+for i in range(colors):
+    if uf.root(i) == i:
+        deg[i] //= 2
+        if deg[i]+1 == uf.issize(i):
+            ans += uf.issize(i)-1
+        else:
+            ans += uf.issize(i)
 print(ans)
-print(AdoptedEdge)

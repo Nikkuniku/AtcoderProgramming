@@ -1,7 +1,7 @@
 class UnionFind:
     def __init__(self, n) -> None:
         self.par = [-1]*(n + 1)
-        self.size = [1]*(n + 1)
+        self.rank = [0]*(n + 1)
 
     def root(self, x):
         if self.par[x] == -1:
@@ -22,29 +22,25 @@ class UnionFind:
             return False
 
         # unionbysize
-        if self.size[x] < self.size[y]:
-            x, y = y, x
-
-        self.par[y] = x
-        self.size[x] += self.size[y]
-
+        if self.rank[x] < self.rank[y]:
+            self.par[x] = y
+        else:
+            self.par[y] = x
+            if self.rank[x] == self.rank[y]:
+                self.rank[x] += 1
         return True
 
-    def issize(self, x):
-        return self.size[self.root(x)]
+    def rank(self, x):
+        return self.rank[x]
 
 
-V, E = map(int, input().split())
-uf = UnionFind(V)
-Edge = [list(map(int, input().split())) for _ in range(E)]
-Edge.sort(key=lambda x: x[2])
-AdoptedEdge = []
-ans = 0
-for a, b, c in Edge:
-    if uf.issame(a, b):
-        continue
+N, M = map(int, input().split())
+uf = UnionFind(N-1)
+for _ in range(M):
+    a, b = map(int, input().split())
+    a -= 1
+    b -= 1
     uf.unite(a, b)
-    AdoptedEdge.append((a, b, c))
-    ans += c
-print(ans)
-print(AdoptedEdge)
+
+cnt = uf.par.count(-1)
+print(cnt-1)
