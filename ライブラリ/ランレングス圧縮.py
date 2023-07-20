@@ -4,7 +4,7 @@ def RLE(S: list) -> list:
     [(value1,length1),(value2,length2),...]
 
     Parameters
-    ----------
+    -----------
     S:list
 
     Examples
