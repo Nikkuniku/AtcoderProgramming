@@ -1,5 +1,8 @@
+import pypyjit
+from collections import deque
 import sys
 sys.setrecursionlimit(10**8)
+pypyjit.set_param('max_unroll_recursion=-1')
 
 
 class Scc:
@@ -71,24 +74,27 @@ scc = Scc(n)
 # tupleの形で,(a,b)（aからbへ向かう辺）をABに格納
 AB = [tuple(map(int, input().split())) for i in range(m)]
 edge = [set() for _ in range(n)]
+edge_rev = [[] for _ in range(n)]
 for a, b in AB:
     scc.add_edge(a-1, b-1)
     edge[a-1].add(b-1)
+    edge_rev[b-1].append(a-1)
 
 group = scc.scc()
-vertex = set()
+vertex = [False]*n
+q = deque()
 for p in group:
-    if len(p) > 1:
-        vertex |= set(p)
-
-for i in range(n):
-    Flg=False
-    for e in edge[i]:
-        if e in vertex:
-            Flg=True
-    
-    if (i in vertex) or Flg:
-        vertex.add(i)
-
-print(len(vertex))
-    
+    if len(p) == 1:
+        continue
+    for v in p:
+        vertex[v] = True
+        q.append(v)
+while q:
+    v = q.popleft()
+    vertex[v] = True
+    for e in edge_rev[v]:
+        if vertex[e]:
+            continue
+        q.append(e)
+ans = sum(vertex)
+print(ans)

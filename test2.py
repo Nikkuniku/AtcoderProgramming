@@ -1,13 +1,8 @@
-# import numpy as np
-# n,m=map(int,input().split())
-# a=list(map(int,input().split()))
-# c=list(map(int,input().split()))
-# a=list(reversed(a))
-# c=list(reversed(c))
-
-# p=np.poly1d(a)
-# q=np.poly1d(c)
-# r=q/p
-# print(*list((map(int,list(reversed(list(r[0].c)))))))
-s = [i+1 for i in range(400)][::-1]
-print(*s)
+for a in range(3):
+    for b in range(3):
+        if a == b:
+            continue
+        for c in range(3):
+            if a == c or b == c:
+                continue
+            print(a, b, c)

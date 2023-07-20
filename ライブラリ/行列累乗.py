@@ -1,13 +1,9 @@
-n, k = map(int, input().split())
-a = [list(map(int, input().split())) for _ in range(n)]
-MOD = 1000000007
-
-
 def mat_mul(a, b):
     """
-    a: 行列(2次元配列)N*M
-    b: 行列(2次元配列)M*L
+    a: 行列(2次元配列)I*J
+    b: 行列(2次元配列)J*K
     """
+    MOD = 1000000007
     I, J, K = len(a), len(b[0]), len(b)
     c = [[0] * J for _ in range(I)]
     for i in range(I):
@@ -37,10 +33,12 @@ def pow_mat(A, n):
     return p
 
 
+n, k = map(int, input().split())
+a = [list(map(int, input().split())) for _ in range(n)]
+
 a = pow_mat(a, k)
 ans = 0
 for i in range(n):
     for j in range(n):
         ans += a[i][j]
-        ans %= MOD
 print(ans)

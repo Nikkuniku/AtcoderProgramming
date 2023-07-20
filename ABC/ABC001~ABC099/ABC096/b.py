@@ -1,0 +1,5 @@
+P = list(map(int, input().split()))
+P.sort()
+K = int(input())
+ans = P[0]+P[1]+P[2]*pow(2, K)
+print(ans)
