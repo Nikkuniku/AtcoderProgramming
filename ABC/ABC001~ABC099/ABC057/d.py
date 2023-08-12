@@ -8,20 +8,27 @@ def nCr(n, r):
 
 
 N, A, B = map(int, input().split())
-V = list(map(int, input().split()))
-V.sort(reverse=True)
+V = sorted(list(map(int, input().split())))[::-1]
 C = Counter(V)
 a = []
 for i in range(A):
     a.append(V[i])
-p = a[-1]
-ans = sum(a)/len(a)
-print(ans)
+M = sum(a)/len(a)
 
-ans2 = nCr(C[p], a.count(p))
-for i in range(A+1, B):
-    if ans == (ans+V[i])/(len(a)+1):
-        a.append(V[i])
-        p = a[-1]
-        ans2 += nCr(C[p], a.count(p))
-print(ans2)
+
+def Count(Q):
+    res = 1
+    C_tmp = Counter(Q)
+    for k, v in C_tmp.items():
+        res *= nCr(C[k], C_tmp[k])
+    return res
+
+
+ans = Count(a)
+for i in range(A, B):
+    p = V[i]
+    if sum(a) == len(a)*p:
+        a.append(p)
+        ans += Count(a)
+print(M)
+print(ans)
