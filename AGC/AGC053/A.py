@@ -5,11 +5,11 @@ def Base(N, S):
     B = [0] * N
 
     for i in range(1, N):
-        if S[i-1] == "<":
-            A[i] = A[i-1] + 1
-    for i in range(N-1)[::-1]:
+        if S[i - 1] == "<":
+            A[i] = A[i - 1] + 1
+    for i in range(N - 1)[::-1]:
         if S[i] == ">":
-            B[i] = B[i+1] + 1
+            B[i] = B[i + 1] + 1
 
     C = [max(A[i], B[i]) for i in range(N)]
     return C
@@ -23,11 +23,11 @@ def judge(a, b, s):
         if c[i] < 0:
             return False
     for i in range(len(s)):
-        if s[i] == '>':
-            if not (c[i] >= c[i+1]):
+        if s[i] == ">":
+            if not (c[i] >= c[i + 1]):
                 res = False
-        elif s[i] == '<':
-            if not (c[i] <= c[i+1]):
+        elif s[i] == "<":
+            if not (c[i] <= c[i + 1]):
                 res = False
     return res
 
@@ -35,13 +35,19 @@ def judge(a, b, s):
 N = int(input())
 S = input()
 A = list(map(int, input().split()))
+M = []
+for i in range(N):
+    if A[i] > A[i + 1]:
+        M.append(A[i] - A[i + 1])
+    else:
+        M.append(A[i + 1] - A[i])
 B = Base(N, S)
 ans = []
-while judge(A, B, S):
+for _ in range(min(M)):
     ans.append(B[:])
-    for i in range(N+1):
+    for i in range(N + 1):
         A[i] -= B[i]
-for i in range(N+1):
+for i in range(N + 1):
     ans[0][i] += A[i]
 print(len(ans))
 for c in ans:
