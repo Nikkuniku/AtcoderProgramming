@@ -1,0 +1,5 @@
+N = int(input())
+X = list(map(int, input().split()))
+X.sort()
+S = sum(X[N : 4 * N]) / (3 * N)
+print(S)

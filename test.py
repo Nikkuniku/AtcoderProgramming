@@ -1,26 +1,51 @@
-from itertools import permutations
-from sortedcontainers import SortedSet, SortedList, SortedDict
-from more_itertools import run_length, pairwise
+def BFS01_NG(N, Edge):
+    from collections import deque
 
-a = [9, 4, 6, 2]
-ope = ["+", "-", "*", "/"]
-P = permutations(ope, 3)
-for c in P:
-    s = []
-    for i in range(7):
-        if i % 2 == 0:
-            s.append(str(a[i // 2]))
-        else:
-            s.append(c[i // 2])
-    tmp = "".join(s)
-    print(tmp)
+    init = -1
+    dist = [init] * N
+    q = deque([(0, 0)])
+    dist[0] = 0
+    while q:
+        print(q)
+        v, d = q.popleft()
+        for e, c in Edge[v]:
+            if dist[e] != init:
+                continue
+            dist[e] = dist[v] + c
+            if c == 0:
+                q.appendleft((e, dist[e]))
+            else:
+                q.append((e, dist[e]))
+    return dist
 
-tmp = []
-tmp.sort()
-print(tmp)
 
-A = [1, 1, 1, 2, 3, 3, 5, 6, 4, 5, 67, 82, 2, 2, 2, 1]
-print(list(run_length.encode(A)))
-B = [1, 2, 3, 4, 5]
-C = list(pairwise(B))
-print(C)
+def BFS01_OK(N, Edge):
+    from collections import deque
+
+    init = 1 << 60
+    dist = [init] * N
+    q = deque([0])
+    dist[0] = 0
+    while q:
+        v = q.popleft()
+        for e, c in Edge[v]:
+            if dist[v] + c >= dist[e]:
+                continue
+            dist[e] = dist[v] + c
+            if c == 0:
+                q.appendleft(e)
+            else:
+                q.append(e)
+    return dist
+
+
+N, M = map(int, input().split())
+Edge = [[] for _ in range(N)]
+for _ in range(M):
+    a, b, c = map(int, input().split())
+    a -= 1
+    b -= 1
+    Edge[a].append((b, c))
+    Edge[b].append((a, c))
+print(BFS01_NG(N, Edge))
+print(BFS01_OK(N, Edge))
