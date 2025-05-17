@@ -56,24 +56,24 @@ class Trie:
         # self.cは-1にしておく
         # 文字列の最後ではacceptからpopする
         node_id = 0
-        pre_ids = []
+        history = []
         for i in range(len(word)):
             c = ord(word[i]) - self.base
             next_id = self.next[node_id][c]
-            if next_id == -1:
-                pass
-                # 今見ている文字列で最後
-            self.common[node_id] -= 1
-            if self.common[node_id] == 0:
-                self.c[node_id] = -1
-                self.next[pre_id][c] = -1
-            pre_id = node_id
+            history.append((node_id, c))
             node_id = next_id
         self.accept[node_id].pop()
         self.common[node_id] -= 1
         if self.common[node_id] == 0:
             self.c[node_id] = -1
-            self.next[pre_id][c] = -1
+        while history:
+            node_id, c = history.pop()
+            next_id = self.next[node_id][c]
+            if self.common[next_id] == 0:
+                self.next[node_id][c] = -1
+            self.common[node_id] -= 1
+            if self.common[node_id] == 0:
+                self.c[node_id] = -1
         return True
 
     def start_with(self, word: str):
@@ -101,7 +101,7 @@ class Trie:
 N = int(input())
 S = [input() for _ in range(N)]
 TrieTree = Trie()
-for i in range(N - 1, 0, -1):
+for i in range(N):
     TrieTree.insert(S[i])
 ans = []
 for i in range(N):
