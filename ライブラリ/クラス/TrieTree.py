@@ -1,7 +1,7 @@
 class Trie:
     class Node:
-        def __init__(self, c_=-1):
-            self.child = [-1] * 26
+        def __init__(self, c_: int = -1):
+            self.child = [-1] * self.charsize
             self.accept = []
             self.c = c_
             self.common = 0
@@ -27,7 +27,8 @@ class Trie:
 
     def insert(self, word: str) -> None:
         """
-        trie treeにwordを追加する
+        wordを追加する
+
         Parameters
         ----------
         word:str
@@ -36,7 +37,8 @@ class Trie:
 
     def search(self, word: str, prefix: bool = False) -> bool:
         """
-        trie treeにwordが存在するかどうか判定する
+        wordが存在するかどうか判定する
+
         Parameters
         ----------
         word:str
@@ -52,7 +54,8 @@ class Trie:
 
     def start_with(self, prefix: str) -> bool:
         """
-        trie treeにprefixから始まる文字列が存在するか判定する
+        prefixから始まる文字列が存在するか判定する
+
         Parameters
         ----------
         prefix:str
@@ -67,7 +70,8 @@ class Trie:
 
     def searchword_kth(self, k: int) -> str:
         """
-        trie treeに格納されている文字列の内k番目を返す
+        格納されている文字列の内k番目を返す
+
         Parameters
         ----------
         prefix:str
@@ -96,3 +100,4 @@ trietree = Trie()
 trietree.insert("apple")
 trietree.search("appl")
 trietree.search("apple")
+trietree.searchword_kth()
